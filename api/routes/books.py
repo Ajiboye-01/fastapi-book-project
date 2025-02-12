@@ -56,6 +56,20 @@ async def update_book(book_id: int, book: Book) -> Book:
     )
 
 
+
+#Updated
+#The get_book function is a new endpoint that retrieves a single book by its id. 
+#If the book is not found, it returns a 404 Not Found response. 
+#Otherwise, it returns the book with a 200 OK status code.
+@router.get("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
+async def get_book(book_id: int) -> Book:
+    if book_id not in db.books:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={"message": f"Book with id {book_id} not found"},
+        )
+    return db.get_book(book_id)
+
 @router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_book(book_id: int) -> None:
     db.delete_book(book_id)
